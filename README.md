@@ -43,12 +43,13 @@ monitoring/
 ## Setup Instructions
 
 ```
-git clone <your-repo-link>
+git clone https://github.com/Vikasprajapat1602/content-monitoring-system
 cd content_monitoring_system
 ```
 ```
 python -m venv venv
-venv\Scripts\activate   
+venv\Scripts\activate
+pip install -r requirements.txt 
 ```
 ```
 python manage.py migrate

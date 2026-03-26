@@ -40,7 +40,7 @@ monitoring/
 
 ---
 
-## ⚙️ Setup Instructions
+## Setup Instructions
 
 ```
 git clone <your-repo-link>

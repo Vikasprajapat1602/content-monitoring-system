@@ -68,6 +68,54 @@ python manage.py runserver
  - Flags & Review
     - GET /api/flags/ → List flags
     - PATCH /api/flags/{id}/ → Update status
+  
+## Data Source
+
+This project uses a mock JSON dataset for content ingestion.
+
+Reason:
+- Simpler and faster implementation
+- No dependency on external APIs
+- Deterministic and easy to test
+
+Content is loaded via:
+POST /api/load-content/
+
+## Sample API Requests
+
+### 1. Add Keyword
+
+curl -X POST http://127.0.0.1:8000/api/keywords/ \
+-H "Content-Type: application/json" \
+-d '{"name": "python"}'
+
+
+### 2. Load Content
+
+curl -X POST http://127.0.0.1:8000/api/load-content/
+
+
+### 3. Generate Flags
+
+curl -X POST http://127.0.0.1:8000/api/generate-flags/
+
+
+### 4. Run Full Scan
+
+curl -X POST http://127.0.0.1:8000/api/scan/
+
+
+### 5. Get Flags
+
+curl http://127.0.0.1:8000/api/flags/
+
+
+### 6. Update Flag Status
+
+curl -X PATCH http://127.0.0.1:8000/api/flags/1/ \
+-H "Content-Type: application/json" \
+-d '{"status": "irrelevant"}'
+
 
 ## Suppression Logic
 
@@ -76,8 +124,10 @@ The system tracks last_reviewed_at timestamp.
 If ContentItem.last_updated is newer than the review timestamp:
 → flag is allowed again.
 
-## Assumptions
+##  Assumptions & Trade-offs
 
-Mock JSON dataset used instead of external API.
-Content uniqueness is based on title + source.
-Duplicate flags are prevented using keyword-content pair checks.
+- Used mock dataset instead of external API for simplicity and reliability.
+- Content uniqueness is determined using (title + source).
+- Matching logic is rule-based (exact, partial, body match).
+- No background jobs implemented (scan is synchronous).
+- Suppression logic uses last_reviewed_at timestamp comparison.
